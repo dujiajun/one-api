@@ -92,6 +92,7 @@ func getRequestBody(c *gin.Context, meta *meta.Meta, textRequest *model.GeneralO
 		meta.APIType == apitype.OpenAI &&
 		meta.OriginModelName == meta.ActualModelName &&
 		meta.ChannelType != channeltype.Baichuan &&
+		meta.ChannelType != channeltype.OpenRouter &&
 		meta.ForcedSystemPrompt == "" {
 		// no need to convert request for openai
 		return c.Request.Body, nil
