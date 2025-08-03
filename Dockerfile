@@ -4,6 +4,8 @@ WORKDIR /web
 COPY ./VERSION .
 COPY ./web .
 
+RUN npm config set registry https://registry.npmmirror.com
+
 RUN npm install --prefix /web/default & \
     npm install --prefix /web/berry & \
     npm install --prefix /web/air & \
@@ -16,6 +18,10 @@ RUN DISABLE_ESLINT_PLUGIN='true' REACT_APP_VERSION=$(cat ./VERSION) npm run buil
 
 FROM golang:alpine AS builder2
 
+RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories
+
+RUN apk update
+
 RUN apk add --no-cache \
     gcc \
     musl-dev \
@@ -24,7 +30,8 @@ RUN apk add --no-cache \
 
 ENV GO111MODULE=on \
     CGO_ENABLED=1 \
-    GOOS=linux
+    GOOS=linux\
+    GOPROXY=https://goproxy.cn
 
 WORKDIR /build
 
@@ -37,6 +44,10 @@ COPY --from=builder /web/build ./web/build
 RUN go build -trimpath -ldflags "-s -w -X 'github.com/songquanpeng/one-api/common.Version=$(cat VERSION)' -linkmode external -extldflags '-static'" -o one-api
 
 FROM alpine:latest
+
+RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories
+
+RUN apk update
 
 RUN apk add --no-cache ca-certificates tzdata
 
