@@ -68,6 +68,16 @@ type GeneralOpenAIRequest struct {
 	NumCtx      int    `json:"num_ctx,omitempty"`
 }
 
+type OpenRouterRequest struct {
+	GeneralOpenAIRequest
+	Provider OpenRouterProvider `json:"provider"`
+}
+
+type OpenRouterProvider struct {
+	Order          []string `json:"order"`
+	AllowFallbacks bool     `json:"allow_fallbacks"`
+}
+
 func (r GeneralOpenAIRequest) ParseInput() []string {
 	if r.Input == nil {
 		return nil
