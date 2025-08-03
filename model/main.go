@@ -3,19 +3,21 @@ package model
 import (
 	"database/sql"
 	"fmt"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/glebarez/sqlite"
+	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+
 	"github.com/songquanpeng/one-api/common"
 	"github.com/songquanpeng/one-api/common/config"
 	"github.com/songquanpeng/one-api/common/env"
 	"github.com/songquanpeng/one-api/common/helper"
 	"github.com/songquanpeng/one-api/common/logger"
 	"github.com/songquanpeng/one-api/common/random"
-	"gorm.io/driver/mysql"
-	"gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
-	"os"
-	"strings"
-	"time"
 )
 
 var DB *gorm.DB
@@ -23,7 +25,7 @@ var LOG_DB *gorm.DB
 
 func CreateRootAccountIfNeed() error {
 	var user User
-	//if user.Status != util.UserStatusEnabled {
+	// if user.Status != util.UserStatusEnabled {
 	if err := DB.First(&user).Error; err != nil {
 		logger.SysLog("no user exists, creating a root user for you: username is root, password is 123456")
 		hashedPassword, err := common.Password2Hash("123456")
