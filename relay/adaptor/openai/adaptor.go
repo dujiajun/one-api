@@ -100,8 +100,8 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 		openrouterRequest := model.OpenRouterRequest{
 			GeneralOpenAIRequest: *request,
 			Provider: model.OpenRouterProvider{
-				Order:          []string{"z-ai"},
-				AllowFallbacks: false,
+				Order:          []string{"z-ai", "chutes"},
+				AllowFallbacks: true,
 			},
 		}
 		return openrouterRequest, nil
