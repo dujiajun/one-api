@@ -66,16 +66,21 @@ type GeneralOpenAIRequest struct {
 	// Others
 	Instruction string `json:"instruction,omitempty"`
 	NumCtx      int    `json:"num_ctx,omitempty"`
+	// OpenRouter only
+	Reasoning *OpenRouterReasoning `json:"reasoning,omitempty"`
+	Provider  *OpenRouterProvider  `json:"provider,omitempty"`
 }
 
-type OpenRouterRequest struct {
-	GeneralOpenAIRequest
-	Provider OpenRouterProvider `json:"provider"`
+type OpenRouterReasoning struct {
+	Effort    *string `json:"effort,omitempty"`
+	MaxTokens *int    `json:"max_tokens,omitempty"`
+	Exclude   *bool   `json:"exclude,omitempty"`
+	Enabled   *bool   `json:"enabled,omitempty"`
 }
 
 type OpenRouterProvider struct {
-	Order          []string `json:"order"`
-	AllowFallbacks bool     `json:"allow_fallbacks"`
+	Order          []string `json:"order,omitempty"`
+	AllowFallbacks bool     `json:"allow_fallbacks,omitempty"`
 }
 
 func (r GeneralOpenAIRequest) ParseInput() []string {

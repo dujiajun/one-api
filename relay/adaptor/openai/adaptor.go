@@ -97,14 +97,10 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *model.G
 	}
 
 	if a.ChannelType == channeltype.OpenRouter && strings.HasPrefix(request.Model, "z-ai/") {
-		openrouterRequest := model.OpenRouterRequest{
-			GeneralOpenAIRequest: *request,
-			Provider: model.OpenRouterProvider{
-				Order:          []string{"z-ai", "chutes"},
-				AllowFallbacks: true,
-			},
+		request.Provider = &model.OpenRouterProvider{
+			Order:          []string{"z-ai"},
+			AllowFallbacks: true,
 		}
-		return openrouterRequest, nil
 	}
 
 	return request, nil
